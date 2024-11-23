@@ -32,7 +32,7 @@ def fib_endpoint():
     result = fibonacci(n)
     elapsed_time = time.time() - start_time
     print(f'Total requests served: {request_counter}') 
-    return f'Fibonacci({n}) = {result}, computed in {elapsed_time:.4f} seconds from server-n'
+    return f'Fibonacci({n}) = {result}, computed in {elapsed_time:.4f} seconds from server-n\n'
 
 @app.route('/health', methods=['GET'])
 def health_check():
