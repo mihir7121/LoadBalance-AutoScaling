@@ -6,21 +6,27 @@ This guide walks you through installing Docker and Minikube on Ubuntu, configuri
 
 ## Prerequisites
 
-1. **Operating System**: Ubuntu Linux 20.04.4 LTS (used for this demo).  
-2. **Docker**: Ensure Docker is installed and running:
+1. **Operating System**: Ubuntu Linux 20.04.4 LTS (used for this demo)
+2. **Docker**: Ensure Docker is installed and running
    ```bash
    sudo apt-get install docker.io
    sudo usermod -aG docker $USER
    sudo systemctl start docker
    sudo systemctl enable docker
     ```
-3. **Kubernetes components**: Install using snap:
+3. **Kubernetes components**: Install using snap
     ```bash
     sudo snap install kubeadm kubelet kubectl 
     ```
 
 ## Installation guidelines
-1. **Install Minikube** 
+1. **Clone the Git repo**:
+```bash
+git clone https://github.com/mihir7121/LoadBalance-AutoScaling.git
+cd LoadBalance-AutoScaling/
+```
+
+1. **Install Minikube**:
 Download the Minikube binary for x86-64 architecture:
 ```bash
 curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
@@ -28,7 +34,7 @@ sudo install minikube-linux-amd64 /usr/local/bin/minikube
 ```
 Documentation for Minikube can be found [here](https://minikube.sigs.k8s.io/docs/start/)
 
-2. **Start the Minikube Cluster** 
+2. **Start the Minikube Cluster**:
 Start a Minikube cluster using Docker as the driver with a memory allocation of 4096 MB:
 
 ```bash
@@ -36,20 +42,23 @@ minikube start --driver=docker --memory=4096
 eval $(minikube docker-env)
 ```
 
-3. **Enable Required Add-ons**
+3. **Enable Required Add-ons**:
 Enable essential services for monitoring and API gateway:
 ```bash
 minikube addons enable metrics-server
 minikube addons enable ingress
 ```
-
-4. **Install Locust for Testing**
+4. **Create a docker image for our app.py**:
+```bash
+docker build -t flask-app:latest .
+```
+5. **Install Locust for Testing**:
 Locust is used for load testing. Install it using pip:
 ```bash
 pip install locust 
 ```
 
-5. **Apply YAML Configurations for Kubernetes Resources**
+6. **Apply YAML Configurations for Kubernetes Resources**:
 Apply all the YAML configuration files to create and manage the Kubernetes resources, such as deployments, services, pods etc.:   
 ```bash
 kubectl apply -f deployment.yaml
@@ -57,13 +66,13 @@ kubectl apply -f service.yaml
 kubectl apply -f ingress.yaml
 kubectl apply -f autoscaler.yaml
 ```
-6. **Find your minikube IP**
+7. **Find your minikube IP**:
 This is essential for locust testing
 ```bash
 minikube ip
 ```
 
-7. **Launch Supporting Tools**
+8. **Launch Supporting Tools**:
 Open three separate terminals to run the following commands
 * Terminal 1: Start the Minikube tunnel
 ```bash
